@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+My Blog Detail Page
+{% endblock %}
+
+{% block extra-style %}
+{% endblock %}
+
+{% block content %}
+<h2>{{ post.title }}</h2>
+   
+
+    {% if post.get_previous %}
+    <a href="{{ post.get_previous.get_absolute_url }}" title="View previouspost">
+        
+        <i class='fas fa-arrow-circle-left'></i> {{post.get_previous}} </a>
+    {% endif %}
+
+    {% if post.get_next %}
+    | <a href="{{ post.get_next.get_absolute_url }}" title="View next post"> {{ post.get_next }} <i class='fas fa-arrow-circle-right'></i></a>
+    {% endif %}
+</p>
+
+<p class="date">{{ post.modify_date|date:"j F Y"}}</p>
+<br />
+
+<div class="body">
+    {% if post.image %}
+        <img src="{{ post.image.url }}" width="500"height='500'>
+        {% endif %}
+    
+    {{ post.content|linebreaks }}
+</div>
+
+<html>
+<body>
+    <div id="map" style="width:500px;height:400px;"></div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=49e7ad786cf9f3c4a7557f019b8d6456&libraries=services,clusterer,drawing"></script>
+<script>
+	var container = document.getElementById('map');
+	var mapOptions = {
+		center: new kakao.maps.LatLng('{{post.latitude}}','{{post.longitude}}'),
+		level: 3
+		};
+    
+    var imageSize = new kakao.maps.Size(30, 45);  
+        imageSrc = "https://yeongju.go.kr/design/main/img/sub02/sub020202_14.gif";
+        imageOption = {offset: new kakao.maps.Point(27, 49)}; 
+        markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize,imageOption);
+    
+        var title_list = ("{{post.name}}")
+        var map = new kakao.maps.Map(container, mapOptions);
+    var markerPosition = new kakao.maps.LatLng('{{post.latitude}}','{{post.longitude}}');
+    var marker = new kakao.maps.Marker({
+        position : markerPosition,
+        image : markerImage,
+        title : title_list
+    
+        
+    })
+    marker.setMap(map);
+    
+// 지도타입 컨트롤의 지도 또는 스카이뷰 버튼을 클릭하면 호출되어 지도타입을 바꾸는 함수입니다
+    function setMapType(maptype) {  
+        var roadmapControl = document.getElementById('btnRoadmap');
+        var skyviewControl = document.getElementById('btnSkyview'); 
+        if (maptype === 'roadmap') {
+            map.setMapTypeId(kakao.maps.MapTypeId.ROADMAP);    
+            roadmapControl.className = 'selected_btn';
+            skyviewControl.className = 'btn';
+        } else {
+            map.setMapTypeId(kakao.maps.MapTypeId.HYBRID);    
+            skyviewControl.className = 'selected_btn';
+            roadmapControl.className = 'btn';
+        }
+}
+
+// 지도 확대, 축소 컨트롤에서 확대 버튼을 누르면 호출되어 지도를 확대하는 함수입니다
+function zoomIn() {
+    map.setLevel(map.getLevel() - 1);
+}
+
+// 지도 확대, 축소 컨트롤에서 축소 버튼을 누르면 호출되어 지도를 확대하는 함수입니다
+function zoomOut() {
+    map.setLevel(map.getLevel() + 1);
+}
+    
+</script>
+
+</body>
+</html>
+
+
+
+<br>
+<div>
+    <b>TAGS</b> <i class="fas fa-tag"></i>
+    {% load taggit_templatetags2_tags %}
+    {% get_tags_for_object object as "tags" %}
+    {% for tag in tags %}
+    <a href = "{% url 'blog:tagged_object_list' tag.name %}">#{{tag.name}}</a>
+    {% endfor %}
+    &emsp;
+    <a href="{% url 'blog:tag_cloud' %}">
+    <span class = "btn btn-info btn-sm">TagCloud</span>
+    </a>
+    
+    <div id="disqus_thread"></div>
+
+
+    
+    
+</div>
+
+{% endblock %}
+
+{% block extra-script %}
+
+   
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://andong-lee.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+{% endblock %}

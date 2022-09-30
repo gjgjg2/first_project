@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+My Blog List Page
+{% endblock %}
+
+{% block extra-style %}
+{% endblock %}
+
+{% block content %}
+<div class="row mt-5">
+    <div class="col-12">
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">제목</th>
+            <th scope="col">포스트</th>
+            <th scope="col">작성일</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+        {% for post in posts %}
+          <tr>
+            <th scope="row">{{post.id}}</th>
+            <td><a href='{{ post.get_absolute_url }}'>{{post.title}}</a></td>
+            <td>{{ post.description}}</td>
+            <td>{{ post.modify_dt|date:"N d, Y" }}</td>
+          </tr>
+          {% endfor%}
+          </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <a class="btn btn-primary" href="{% url 'blog:add' %}">글쓰기</a>  <a class='btn btn-primary' href="{% url 'blog:change' %}">수정/삭제</a>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra-script %}
+{% endblock %}

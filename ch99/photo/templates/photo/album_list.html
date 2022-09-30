@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- 스타일 블럭 -->
+{% block title %}
+album_list.html
+{% endblock %}
+
+<!-- 스타일 블럭 -->
+{% block extra-style %}
+
+{% endblock %}
+
+
+<!-- 콘텐츠 블럭 -->
+{% block content %}
+    <h1>앨범 리스트</h1>
+    
+    <h2>리스트:{{ object_list }}</h2> <br>
+    
+    {% for object in object_list %}
+        앨범 명:{{ object }}<br>
+        <!-- 앨범 설명: {{ object.description }}<br> -->
+        <h6>앨범 사진들</h6>
+            <div class="mt-5">    
+            {% for photo in object.photo_set.all|slice:":5" %}
+                제목 : {{ photo }} 
+                <br>
+                <img src="{{ photo.image.url }}" alt="{{ photo }}"><br>
+                사진 설명: {{ photo.description }} <br>
+                <!-- 업로드일 : {{ photo.upload_dt }} <br> -->
+                <!-- <p>이미지 : {{ photo.image }}</p> <br>        -->
+                <!-- 이미지 경로 : {{ photo.image.url }} <br> -->
+                <!-- 썸네일 경로 : {{ photo.image.thumb_url }} <br>        -->
+                <!-- 상세보기 경로 : {{ photo.get_absolute_url }} <br> -->
+                
+                <hr>
+            {% endfor %}
+
+        
+
+        
+        
+        
+        
+        
+        </div>
+
+        <hr>
+        {% endfor %}
+{% endblock %}
+
+<!-- 스크립트 블럭 -->
+{% block extra-script %}
+{% endblock %}
